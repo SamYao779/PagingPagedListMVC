@@ -1,0 +1,51 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<PageListMVC.Models.DB.Product>
+@{
+    ViewBag.Title = "Home Page";
+}
+<br />
+<div id="content">
+    <table class="table table-bordered">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>CatagoryId</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Product Date</th>
+            <th>Available</th>
+        </tr>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Id</td>
+                <td>@p.Name</td>
+                <td>@p.CategoryId</td>
+                <td>@p.UnitPrice</td>
+                <td>@p.Quantity</td>
+                <td>@p.ProductDate</td>
+                <td>@p.Available</td>
+            </tr>
+        }
+    </table>
+    @*Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/ @Model.PageCount*@
+    <div id="myPage" style="text-align:center">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(function () {
+            $("#myPage a").click(function () {
+                $.ajax({
+                    url: $(this).attr("href"),
+                    type: "GET",
+                    success: function (result) {
+                        $("#content").html(result);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}
